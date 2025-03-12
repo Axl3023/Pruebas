@@ -128,10 +128,8 @@ class DocumentController extends Controller
 
         // 4. Realizar la fusión
         //    "merge()" no descarga automáticamente, solo genera el buffer de datos
+        $oMerger->setFileName('all-documents-merged.pdf');
         $oMerger->merge();
-
-        // 5. Retornar descarga
-        //    Este método envía el PDF directamente al navegador para descargarlo
-        return $oMerger->download('all-documents-merged.pdf');
+        return $oMerger->download();
     }
 }
