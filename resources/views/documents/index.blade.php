@@ -17,13 +17,13 @@
 
             // 2. Mostrar el modal
             const modal = document.getElementById('pdfModal');
-            modal.classList.remove('hidden'); // o .add('block')
+            modal.classList.remove('opacity-0', 'pointer-events-none'); // o .add('block')
         }
 
         function closePdfModal() {
             // Cerrar el modal
             const modal = document.getElementById('pdfModal');
-            modal.classList.add('hidden'); // o .remove('block')
+            modal.classList.add('opacity-0', 'pointer-events-none'); // o .remove('block')
 
             // Limpiar el src del iframe (opcional)
             const iframe = document.getElementById('modalPdfIframe');
@@ -77,7 +77,7 @@
                 </tbody>
             </table>
 
-            <div id="pdfModal" class="hidden fixed inset-0 bg-transparent bg-opacity-75 flex justify-center items-center">
+            <div id="pdfModal" class="fixed inset-0 bg-transparent bg-opacity-75 flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-500">
                 <div class="bg-white rounded p-4 w-11/12 h-5/6">
                     <button class=" flex top-2 right-2 text-red-500 font-bold justify-end" onclick="closePdfModal()">
                         Cerrar
