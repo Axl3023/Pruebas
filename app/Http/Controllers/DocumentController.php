@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+
 class DocumentController extends Controller
 {
     /**
@@ -12,7 +14,11 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        //
+        // Obtenemos todos los documentos de la tabla
+        $documents = Document::all();
+
+        // Retornamos la vista "documents.index" con la lista
+        return view('documents.index', compact('documents'));
     }
 
     /**
@@ -72,9 +78,12 @@ class DocumentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $document = Document::findOrFail($id);
+        // Retornamos una vista, p.ej. "documents.show",
+        // enviándole el $document para poder ver su ruta
+        return view('documents.show', compact('document'));
     }
 
     /**
@@ -99,5 +108,30 @@ class DocumentController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function downloadMerged()
+    {
+        // 1. Obtener solo documentos que sean PDFs
+        //    (file_type = 'application/pdf')
+        $documents = Document::where('file_type', 'application/pdf')->get();
+
+        // 2. Inicializar la librería de fusión
+        $oMerger = PDFMerger::init();
+
+        // 3. Agregar cada PDF al merger
+        foreach ($documents as $doc) {
+            $filePath = storage_path('app/public/' . $doc->file_path);
+            // 'all' indica que tome todas las páginas
+            $oMerger->addPDF($filePath, 'all');
+        }
+
+        // 4. Realizar la fusión
+        //    "merge()" no descarga automáticamente, solo genera el buffer de datos
+        $oMerger->merge();
+
+        // 5. Retornar descarga
+        //    Este método envía el PDF directamente al navegador para descargarlo
+        return $oMerger->download('all-documents-merged.pdf');
     }
 }
