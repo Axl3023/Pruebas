@@ -71,6 +71,10 @@
                                     Ver
                                 </button>
                                 <!-- Podrías agregar más acciones: Editar, Eliminar, etc. -->
+                                <a href="{{ route('documents.edit', $document->id) }}"
+                                    class="text-green-600 hover:underline mr-2">
+                                    Editar
+                                </a>
                             </td>
                         </tr>
                     @endforeach
